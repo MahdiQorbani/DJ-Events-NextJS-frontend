@@ -1,3 +1,54 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
+
+html,
+body {
+  font-family: "Poppins", sans-serif;
+  line-height: 1.8;
+}
+
+a {
+  @apply text-blue-500;
+}
+
+p {
+  @apply my-2.5;
+}
+
+h1 {
+  @apply mb-5;
+}
+
+.btn {
+  @apply inline-block bg-red-500 text-white py-2.5 px-5 cursor-pointer rounded;
+}
+
+.btn:hover {
+  @apply opacity-90;
+}
+
+.btn-secondary {
+  @apply text-inherit text-sm bg-black !text-white rounded py-1.5 px-4 mx-5 cursor-pointer;
+}
+
+.btn-secondary:hover {
+  @apply opacity-80;
+}
+
+.btn-icon {
+  @apply flex items-center justify-center;
+}
+
+.btn-icon svg {
+  @apply mr-1.5;
+}
+.nav-link {
+  @apply text-[#333] hover:text-[#000] md:mr-5;
+}
+
+.footer-item {
+  @apply my-1;
+}
