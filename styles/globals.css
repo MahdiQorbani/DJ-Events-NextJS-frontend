@@ -19,23 +19,19 @@ p {
 }
 
 h1 {
-  @apply mb-5;
+  @apply mb-5 font-bold text-3xl;
+}
+
+h4 {
+  @apply font-bold text-base;
 }
 
 .btn {
-  @apply inline-block bg-red-500 text-white py-2.5 px-5 cursor-pointer rounded;
-}
-
-.btn:hover {
-  @apply opacity-90;
+  @apply inline-block bg-red-500 text-white py-2.5 px-5 cursor-pointer rounded hover:opacity-90;
 }
 
 .btn-secondary {
-  @apply text-inherit text-sm bg-black !text-white rounded py-1.5 px-4 mx-5 cursor-pointer;
-}
-
-.btn-secondary:hover {
-  @apply opacity-80;
+  @apply text-inherit text-sm bg-black !text-white rounded py-1.5 px-4 mx-5 cursor-pointer hover:opacity-80;
 }
 
 .btn-icon {
@@ -45,10 +41,35 @@ h1 {
 .btn-icon svg {
   @apply mr-1.5;
 }
+
+/* navbar component */
 .nav-link {
   @apply text-[#333] hover:text-[#000] md:mr-5;
 }
 
+/* footer component */
 .footer-item {
   @apply my-1;
+}
+
+/* showcase component */
+.showcase {
+  @apply relative flex flex-col items-center justify-center text-center text-white h-[300px] w-full bg-black bg-[url('/images/showcase.jpg')] bg-center bg-no-repeat;
+}
+
+.showcase::after {
+  @apply content-[''] absolute top-0 left-0 w-full h-full bg-[rgb(0,0,0,0.7)];
+}
+
+.showcase * {
+  @apply z-20;
+}
+
+.showcase h1 {
+  @apply text-3xl mb-0;
+}
+
+/* event item component */
+.event {
+  @apply flex flex-col items-center justify-center text-center my-5 p-3 shadow-sm md:flex-row;
 }

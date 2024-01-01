@@ -1,11 +1,35 @@
-import Layout from "../components/Layout";
+import Layout from "@/components/Layout";
+import Link from "next/link";
+import EventItem from "@/components/EventItem";
+import { API_URL } from "@/config/index";
 
-const HomePage = () => {
+const HomePage = ({ events }) => {
   return (
     <Layout>
-      <h1>Home</h1>
+      <h1 className="text-center md:text-start">Upcoming Events</h1>
+      {events.length === 0 && <h4>No events to show</h4>}
+
+      {events.map((evt) => (
+        <EventItem key={evt.id} evt={evt} />
+      ))}
+
+      {events.length > 0 && (
+        <Link href="/events" className="btn-secondary">
+          View All Events
+        </Link>
+      )}
     </Layout>
   );
 };
 
 export default HomePage;
+
+export async function getStaticProps() {
+  const res = await fetch(`${API_URL}/api/events`);
+  const events = await res.json();
+
+  return {
+    props: { events: events.slice(0, 3) },
+    revalidate: 1,
+  };
+}

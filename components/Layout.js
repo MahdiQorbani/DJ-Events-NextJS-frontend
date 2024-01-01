@@ -1,8 +1,11 @@
+import { useRouter } from "next/router";
 import Head from "next/head";
 import Header from "./Header";
 import Footer from "./Footer";
+import ShowCase from "./ShowCase";
 
 const Layout = ({ title, keywords, description, children }) => {
+  const router = useRouter();
   return (
     <div>
       <Head>
@@ -12,6 +15,9 @@ const Layout = ({ title, keywords, description, children }) => {
       </Head>
 
       <Header />
+
+      {router.pathname === "/" && <ShowCase />}
+
       <div className="my-16 m-auto px-8 max-w-[960px]">{children}</div>
       <Footer />
     </div>
