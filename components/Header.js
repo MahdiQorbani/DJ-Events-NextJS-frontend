@@ -20,8 +20,8 @@ const Header = () => {
             </Link>
           </li>
           <li>
-            <Link className="nav-link" href="/events">
-              Events
+            <Link className="nav-link" href="/events/add">
+              Add Event
             </Link>
           </li>
         </ul>
