@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Search from "./Search";
 
 const Header = () => {
   return (
@@ -8,6 +9,8 @@ const Header = () => {
           DJ Events
         </Link>
       </div>
+
+      <Search />
 
       <nav>
         <ul className="flex flex-col text-center items-center justify-center my-5 md:my-0 md:flex-row">
