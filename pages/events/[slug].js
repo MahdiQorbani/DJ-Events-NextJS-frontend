@@ -8,6 +8,9 @@ const EventPage = ({ evt }) => {
   const deleteEvent = (e) => {
     console.log("delete");
   };
+
+  const { attributes: thisEvent } = evt;
+
   return (
     <Layout>
       <div className="relative pt-10">
@@ -21,20 +24,28 @@ const EventPage = ({ evt }) => {
         </div>
 
         <span>
-          {evt.name} at {evt.time}
+          {new Date(thisEvent.date).toLocaleDateString("en-US")} at{" "}
+          {thisEvent.time}
         </span>
-        <h1>{evt.name}</h1>
-        {evt.image && (
+        <h1>{thisEvent.name}</h1>
+        {thisEvent.image && (
           <div className="mb-5">
-            <Image src={evt.image} width={960} height={600} />
+            <Image
+              src={thisEvent.image.data.attributes.url}
+              width="0"
+              height="0"
+              sizes="100vw"
+              className="w-full h-auto"
+              alt=""
+            />
           </div>
         )}
         <h4>Performers:</h4>
-        <p>{evt.performers}</p>
+        <p>{thisEvent.performers}</p>
         <h4>Description:</h4>
-        <p>{evt.description}</p>
+        <p>{thisEvent.description}</p>
         <h4>Venue: {evt.venue}</h4>
-        <p>{evt.address}</p>
+        <p>{thisEvent.address}</p>
 
         <Link href="/events" className="block mt-10">
           {"<"} Go Back
@@ -47,10 +58,12 @@ const EventPage = ({ evt }) => {
 export default EventPage;
 
 export async function getStaticPaths() {
-  const res = await fetch(`${API_URL}/api/events`);
-  const events = await res.json();
+  const res = await fetch(`${API_URL}/api/events?sort=date:asc&populate=*`);
+  const { data: events } = await res.json();
 
-  const paths = events.map((evt) => ({ params: { slug: evt.slug } }));
+  const paths = events.map(({ attributes: evt }) => ({
+    params: { slug: evt.slug },
+  }));
 
   return {
     paths,
@@ -59,8 +72,10 @@ export async function getStaticPaths() {
 }
 
 export async function getStaticProps({ params: { slug } }) {
-  const res = await fetch(`${API_URL}/api/events/${slug}`);
-  const events = await res.json();
+  const res = await fetch(
+    `${API_URL}/api/events?filters[slug][$eq]=${slug}&populate=*`
+  );
+  const { data: events } = await res.json();
 
   return {
     props: {

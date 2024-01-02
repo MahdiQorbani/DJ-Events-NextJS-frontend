@@ -6,15 +6,22 @@ const EventItem = ({ evt }) => {
     <div className="event">
       <div className="flex-1 m-2.5">
         <Image
-          src={evt.image ? evt.image : "/images/event-default.png"}
-          width={170}
-          height={100}
+          src={
+            evt.image
+              ? evt.image.data.attributes.formats.thumbnail.url
+              : "/images/event-default.png"
+          }
+          width="0"
+          height="0"
+          sizes="100vw"
+          className="w-full h-auto"
+          alt=""
         />
       </div>
 
       <div className="flex-[2_2_0%] mb-5 md:mb-0">
         <span>
-          {evt.date} at {evt.time}
+          {new Date(evt.date).toLocaleDateString("en-US")} at {evt.time}
         </span>
         <h4>{evt.name}</h4>
       </div>
