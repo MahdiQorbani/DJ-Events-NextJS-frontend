@@ -90,7 +90,7 @@ const EditEventPage = ({ evt }) => {
         ? newData.data.attributes.image.data.attributes.formats.thumbnail.url
         : null
     );
-    showModal(false);
+    setShowModal(false);
   };
 
   return (
