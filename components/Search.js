@@ -20,7 +20,7 @@ const Search = () => {
           value={term}
           onChange={(e) => setTerm(e.target.value)}
           placeholder="Search Events"
-          className="p-1.5 rounded-full"
+          className="p-1.5 border border-blue-500 rounded-full text-center"
         />
       </form>
     </div>

@@ -7,7 +7,7 @@ const EventItem = ({ evt }) => {
       <div className="flex-1 m-2.5">
         <Image
           src={
-            evt.image
+            evt.image.data
               ? evt.image.data.attributes.formats.thumbnail.url
               : "/images/event-default.png"
           }

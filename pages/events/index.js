@@ -1,8 +1,9 @@
+import Pagination from "@/components/common/Pagination";
 import Layout from "@/components/Layout";
 import EventItem from "@/components/EventItem";
-import { API_URL } from "@/config/index";
+import { API_URL, PER_PAGE } from "@/config/index";
 
-const EventsPage = ({ events }) => {
+const EventsPage = ({ events, page, total }) => {
   return (
     <Layout>
       <h1 className="text-center md:text-start">Events</h1>
@@ -11,18 +12,26 @@ const EventsPage = ({ events }) => {
       {events.map(({ attributes: evt }) => (
         <EventItem key={evt.slug} evt={evt} />
       ))}
+      <Pagination total={total} page={page} />
     </Layout>
   );
 };
 
 export default EventsPage;
 
-export async function getStaticProps() {
-  const res = await fetch(`${API_URL}/api/events?sort=date:asc&populate=*`);
-  const { data: events } = await res.json();
+export async function getServerSideProps({ query: { page = 1 } }) {
+  // Calculate Start Page
+  const start = +page === 1 ? 0 : (+page - 1) * PER_PAGE;
+
+  //Fetch Events
+  const res = await fetch(
+    `${API_URL}/api/events?sort=date:asc&pagination[start]=${start}&pagination[limit]=${PER_PAGE}&pagination[withCount]=true&populate=*`
+  );
+  const { data: events, meta } = await res.json();
+
+  const { total } = meta.pagination;
 
   return {
-    props: { events },
-    revalidate: 1,
+    props: { events, page: +page, total },
   };
 }

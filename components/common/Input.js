@@ -1,10 +1,18 @@
 import React from "react";
 
-export default function Input({ name, value, onChange, type, textarea }) {
+export default function Input({
+  name,
+  value,
+  onChange,
+  type,
+  textarea,
+  label,
+  error,
+}) {
   return (
-    <div className={textarea === "true" && "md:col-span-2"}>
+    <div className={textarea === "true" ? "md:col-span-2" : ""}>
       <label htmlFor={name} className="capitalize">
-        Event {name}
+        {label}
       </label>
       {textarea === "true" ? (
         <textarea
@@ -25,6 +33,7 @@ export default function Input({ name, value, onChange, type, textarea }) {
           onChange={onChange}
         />
       )}
+      {error && <div className="w-full h-10 p-1 bg-red-300">{error}</div>}
     </div>
   );
 }

@@ -27,7 +27,7 @@ h4 {
 }
 
 .btn {
-  @apply inline-block bg-red-500 text-white py-2.5 px-5 cursor-pointer rounded hover:opacity-90;
+  @apply inline-block bg-red-500 text-white py-2.5 px-5 rounded hover:opacity-90;
 }
 
 .btn-secondary {
@@ -71,5 +71,5 @@ h4 {
 
 /* event item component */
 .event {
-  @apply flex flex-col items-center justify-center text-center my-5 p-3 shadow-sm md:flex-row;
+  @apply flex flex-col items-center justify-center text-center my-5 p-3 shadow-lg md:flex-row;
 }

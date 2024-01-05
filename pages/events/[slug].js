@@ -1,13 +1,34 @@
 import Layout from "@/components/Layout";
 import Link from "next/link";
 import Image from "next/image";
+import { useRouter } from "next/router";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { FaPencilAlt, FaTimes } from "react-icons/fa";
 import { API_URL } from "@/config";
 
 const EventPage = ({ evt }) => {
-  const deleteEvent = (e) => {
-    console.log("delete");
+  const router = useRouter();
+
+  const deleteEvent = async (e) => {
+    if (confirm("Are you sure?")) {
+      const res = await fetch(`${API_URL}/api/events/${evt.id}`, {
+        method: "DELETE",
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        toast.error(data.message);
+      } else {
+        router.push("/events");
+      }
+    }
   };
+
+  if (router.isFallback) {
+    return;
+  }
 
   const { attributes: thisEvent } = evt;
 
@@ -28,7 +49,8 @@ const EventPage = ({ evt }) => {
           {thisEvent.time}
         </span>
         <h1>{thisEvent.name}</h1>
-        {thisEvent.image && (
+        <ToastContainer />
+        {thisEvent.image.data && (
           <div className="mb-5">
             <Image
               src={thisEvent.image.data.attributes.url}
@@ -72,15 +94,20 @@ export async function getStaticPaths() {
 }
 
 export async function getStaticProps({ params: { slug } }) {
-  const res = await fetch(
-    `${API_URL}/api/events?filters[slug][$eq]=${slug}&populate=*`
-  );
-  const { data: events } = await res.json();
+  try {
+    const res = await fetch(
+      `${API_URL}/api/events?filters[slug][$eq]=${slug}&populate=*`
+    );
+    const { data: events } = await res.json();
+    const evt = events ? events[0] : false;
 
-  return {
-    props: {
-      evt: events[0],
-    },
-    revalidate: 1,
-  };
+    return {
+      props: {
+        evt: evt,
+      },
+      revalidate: 1,
+    };
+  } catch (error) {
+    return null;
+  }
 }
