@@ -6,6 +6,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Layout from "@/components/Layout";
 import useForm from "@/components/common/form";
+import AuthContext from "@/context/AuthContext";
 
 export default function LoginPage() {
   const [values, setValues] = useState({
@@ -14,13 +15,15 @@ export default function LoginPage() {
   });
   const [errors, setErrors] = useState({});
 
+  const { login, error: resErrors } = useContext(AuthContext);
+
   const rule = {
     schema: {
       email: Joi.string().required().email().label("Email"),
       password: Joi.string().required().min(8).label("Password"),
     },
-    onSubmit: async () => {
-      console.log("submitted");
+    onSubmit: () => {
+      login(values);
     },
     values,
     setValues,

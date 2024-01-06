@@ -6,6 +6,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Layout from "@/components/Layout";
 import useForm from "@/components/common/form";
+import AuthContext from "@/context/AuthContext";
 
 export default function RegisterPage() {
   const [values, setValues] = useState({
@@ -15,6 +16,8 @@ export default function RegisterPage() {
     password_confirmation: "",
   });
   const [errors, setErrors] = useState({});
+
+  const { register, error: resErrors } = useContext(AuthContext);
 
   const rule = {
     schema: {
@@ -27,8 +30,8 @@ export default function RegisterPage() {
         .label("Confirm Password")
         .options({ language: { any: { allowOnly: "doesn't match" } } }),
     },
-    onSubmit: async () => {
-      console.log("submitted");
+    onSubmit: () => {
+      register(values);
     },
     values,
     setValues,
