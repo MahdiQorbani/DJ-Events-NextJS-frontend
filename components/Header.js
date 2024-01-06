@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Search from "./Search";
+import { FaSignInAlt, FaSignOutAlt } from "react-icons/fa";
 
 const Header = () => {
   return (
@@ -13,7 +14,7 @@ const Header = () => {
       <Search />
 
       <nav>
-        <ul className="flex flex-col text-center items-center justify-center my-5 md:my-0 md:flex-row">
+        <ul className="flex flex-col-reverse text-center items-center justify-center my-5 md:my-0 md:flex-row-reverse">
           <li>
             <Link className="nav-link" href="/events">
               Events
@@ -22,6 +23,14 @@ const Header = () => {
           <li>
             <Link className="nav-link" href="/events/add">
               Add Event
+            </Link>
+          </li>
+          <li>
+            <Link
+              className="nav-link btn-secondary btn-icon"
+              href="/account/login"
+            >
+              <FaSignInAlt /> Login
             </Link>
           </li>
         </ul>

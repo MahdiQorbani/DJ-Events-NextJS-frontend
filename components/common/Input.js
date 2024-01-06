@@ -8,15 +8,18 @@ export default function Input({
   textarea,
   label,
   error,
+  classes,
 }) {
+  classes = `w-full p-1 border border-blue-500 ${classes}`;
+  label = label.replace("_", " ");
   return (
     <div className={textarea === "true" ? "md:col-span-2" : ""}>
-      <label htmlFor={name} className="capitalize">
+      <label htmlFor={name} className="capitalize block mb-2.5">
         {label}
       </label>
       {textarea === "true" ? (
         <textarea
-          className="w-full h-24 p-1 border border-blue-500 col-span-2"
+          className={`h-24 ${classes}`}
           type={type}
           id={name}
           name={name}
@@ -25,7 +28,7 @@ export default function Input({
         />
       ) : (
         <input
-          className="w-full h-10 p-1 border border-blue-500"
+          className={`h-10 ${classes}`}
           type={type}
           id={name}
           name={name}

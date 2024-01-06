@@ -22,6 +22,11 @@ function useForm(props) {
     return error ? error.details[0].message : null;
   };
 
+  const passwordConfirmation = (value) => {
+    if (value !== values.password) return `"Confirm Password" doesn't match`;
+    else return null;
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -34,7 +39,10 @@ function useForm(props) {
 
   const handleChange = ({ currentTarget: input }) => {
     const faults = { ...errors };
-    const errorMessage = validateProperty(input);
+    const errorMessage =
+      input.name === "password_confirmation"
+        ? passwordConfirmation(input.value)
+        : validateProperty(input);
     if (errorMessage) faults[input.name] = errorMessage;
     else delete faults[input.name];
 
@@ -45,20 +53,23 @@ function useForm(props) {
     setValues(data);
   };
 
-  const renderInput = (name, label) => {
+  const renderInput = (name, label, classes = null) => {
+    let type;
+    if (name === "date" || name === "time" || name === "email") {
+      type = name;
+    } else if (name === "password" || name === "password_confirmation") {
+      type = "password";
+    } else {
+      type = "text";
+    }
+
     return (
       <Input
         key={name}
+        classes={classes}
         label={label}
         textarea={name === "description" ? "true" : "false"}
-        type={
-          name === "date" ||
-          name === "password" ||
-          name === "time" ||
-          name === "email"
-            ? name
-            : "text"
-        }
+        type={type}
         name={name}
         value={
           name === "date"
@@ -71,9 +82,13 @@ function useForm(props) {
     );
   };
 
-  const renderButton = (label) => {
+  const renderButton = (label, classes = null) => {
     return (
-      <button disabled={validate()} type="submit" className="btn">
+      <button
+        disabled={validate()}
+        type="submit"
+        className={`btn cursor-pointer disabled:cursor-not-allowed ${classes}`}
+      >
         {label}
       </button>
     );
