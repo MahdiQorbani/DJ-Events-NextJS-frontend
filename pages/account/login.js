@@ -15,7 +15,16 @@ export default function LoginPage() {
   });
   const [errors, setErrors] = useState({});
 
-  const { login, error: resErrors } = useContext(AuthContext);
+  const {
+    login,
+    error: resError,
+    setError: setResError,
+  } = useContext(AuthContext);
+
+  useEffect(() => {
+    resError && toast.error(resError);
+    setResError(null);
+  });
 
   const rule = {
     schema: {

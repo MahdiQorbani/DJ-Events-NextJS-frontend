@@ -17,7 +17,16 @@ export default function RegisterPage() {
   });
   const [errors, setErrors] = useState({});
 
-  const { register, error: resErrors } = useContext(AuthContext);
+  const {
+    register,
+    error: resError,
+    setError: setResError,
+  } = useContext(AuthContext);
+
+  useEffect(() => {
+    resError && toast.error(resError);
+    setResError(null);
+  });
 
   const rule = {
     schema: {
