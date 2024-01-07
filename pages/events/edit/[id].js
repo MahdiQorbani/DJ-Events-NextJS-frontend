@@ -10,7 +10,7 @@ import "react-toastify/dist/ReactToastify.css";
 import Layout from "@/components/Layout";
 import Modal from "@/components/common/Modal";
 import ImageUpload from "@/components/ImageUpload";
-import useForm from "@/components/common/form";
+import useForm from "@/helpers/form";
 import { API_URL } from "@/config";
 
 const EditEventPage = ({ evt }) => {
@@ -59,8 +59,6 @@ const EditEventPage = ({ evt }) => {
 
       if (!res.ok) {
         toast.error("Somthing Went Wrong");
-        console.log(await res.json());
-        console.log(request);
       } else {
         const { data } = await res.json();
         const evt = data.attributes;

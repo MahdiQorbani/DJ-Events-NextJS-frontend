@@ -5,7 +5,7 @@ import { FaUser } from "react-icons/fa";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Layout from "@/components/Layout";
-import useForm from "@/components/common/form";
+import useForm from "@/helpers/form";
 import AuthContext from "@/context/AuthContext";
 
 export default function RegisterPage() {

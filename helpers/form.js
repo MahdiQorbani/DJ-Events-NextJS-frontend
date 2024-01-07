@@ -1,8 +1,8 @@
-import Input from "./Input";
+import Input from "@/components/common/Input";
 import Joi from "joi-browser";
 import moment from "moment";
 
-function useForm(props) {
+export default function useForm(props) {
   const { schema, onSubmit, values, setValues, errors, setErrors } = props;
 
   const validate = () => {
@@ -100,5 +100,3 @@ function useForm(props) {
     renderInput,
   };
 }
-
-export default useForm;

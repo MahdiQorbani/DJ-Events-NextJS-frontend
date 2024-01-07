@@ -6,7 +6,7 @@ import slugify from "react-slugify";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Layout from "@/components/Layout";
-import useForm from "../../components/common/form";
+import useForm from "../../helpers/form";
 import { API_URL } from "@/config";
 
 const AddEventPage = () => {

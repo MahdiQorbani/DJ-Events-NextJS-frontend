@@ -19,8 +19,6 @@ export default async (req, res) => {
 
     const user = await serverRes.json();
 
-    console.log(user);
-
     if (serverRes.ok) {
       res.status(200).json({ user });
     } else {
