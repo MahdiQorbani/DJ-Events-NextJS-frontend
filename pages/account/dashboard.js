@@ -1,14 +1,31 @@
 import React from "react";
 import Layout from "@/components/Layout";
+import { useRouter } from "next/router";
 import DashboardEvent from "@/components/DashboardEvent";
 import { parseCookies } from "@/helpers";
 import { API_URL } from "@/config";
 
-export default function DashboardPage({ events }) {
+export default function DashboardPage({ events, token }) {
+  const router = useRouter();
   const { data } = events;
 
-  const deleteEvent = (id) => {
-    console.log(id);
+  const deleteEvent = async (id) => {
+    if (confirm("Are you sure?")) {
+      const res = await fetch(`${API_URL}/api/events/${id}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        toast.error(data.message);
+      } else {
+        router.push("/events");
+      }
+    }
   };
 
   return (
@@ -40,6 +57,7 @@ export async function getServerSideProps({ req }) {
   return {
     props: {
       events,
+      token,
     },
   };
 }

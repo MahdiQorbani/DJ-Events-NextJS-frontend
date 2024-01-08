@@ -1,15 +1,17 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
+import AuthContext from "@/context/AuthContext";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import Joi from "joi-browser";
 import slugify from "react-slugify";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { parseCookies } from "@/helpers";
 import Layout from "@/components/Layout";
 import useForm from "../../helpers/form";
 import { API_URL } from "@/config";
 
-const AddEventPage = () => {
+const AddEventPage = ({ token }) => {
   const [values, setValues] = useState({
     name: "",
     performers: "",
@@ -19,6 +21,8 @@ const AddEventPage = () => {
     time: "",
     description: "",
   });
+
+  const { user } = useContext(AuthContext);
 
   const [errors, setErrors] = useState({});
 
@@ -40,14 +44,21 @@ const AddEventPage = () => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({ data: { slug: slug, ...values } }),
+        body: JSON.stringify({
+          data: { slug: slug, user: user, ...values },
+        }),
       };
 
       const res = await fetch(`${API_URL}/api/events`, request);
 
       if (!res.ok) {
-        toast.error("Somthing Went Wrong");
+        if (res.status === 403) {
+          toast.error("No token included");
+        } else {
+          toast.error("Somthing Went Wrong");
+        }
       } else {
         const { data } = await res.json();
         const evt = data.attributes;
@@ -81,3 +92,11 @@ const AddEventPage = () => {
 };
 
 export default AddEventPage;
+
+export async function getServerSideProps({ req }) {
+  const { token } = parseCookies(req);
+
+  return {
+    props: { token },
+  };
+}

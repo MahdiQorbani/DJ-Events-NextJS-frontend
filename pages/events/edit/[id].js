@@ -7,13 +7,14 @@ import { FaImage } from "react-icons/fa";
 import slugify from "react-slugify";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { parseCookies } from "@/helpers";
 import Layout from "@/components/Layout";
 import Modal from "@/components/common/Modal";
 import ImageUpload from "@/components/ImageUpload";
 import useForm from "@/helpers/form";
 import { API_URL } from "@/config";
 
-const EditEventPage = ({ evt }) => {
+const EditEventPage = ({ evt, token }) => {
   const { attributes: data } = evt.data;
   const [values, setValues] = useState({
     name: data.name,
@@ -51,14 +52,18 @@ const EditEventPage = ({ evt }) => {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({ data: { slug: slug, ...values } }),
       };
 
       const res = await fetch(`${API_URL}/api/events/${evt.data.id}`, request);
-
       if (!res.ok) {
-        toast.error("Somthing Went Wrong");
+        if (res.status === 401) {
+          toast.error("You cant edit this entry");
+        } else {
+          toast.error("Somthing Went Wrong");
+        }
       } else {
         const { data } = await res.json();
         const evt = data.attributes;
@@ -129,7 +134,11 @@ const EditEventPage = ({ evt }) => {
       </div>
 
       <Modal show={showModal} onClose={() => setShowModal(false)}>
-        <ImageUpload evtId={evt.data.id} imageUploaded={imageUploaded} />
+        <ImageUpload
+          evtId={evt.data.id}
+          imageUploaded={imageUploaded}
+          token={token}
+        />
       </Modal>
     </Layout>
   );
@@ -141,9 +150,12 @@ export async function getServerSideProps({ params: { id }, req }) {
   const res = await fetch(`${API_URL}/api/events/${id}?populate=*`);
   const evt = await res.json();
 
+  const { token } = parseCookies(req);
+
   return {
     props: {
       evt,
+      token,
     },
   };
 }

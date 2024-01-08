@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import { API_URL } from "@/config";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
-export default function ImageUpload({ evtId, imageUploaded }) {
+export default function ImageUpload({ evtId, imageUploaded, token }) {
   const [image, setImage] = useState(null);
 
   const [buttonDisabled, setButtonDisabled] = useState(false);
@@ -12,11 +14,16 @@ export default function ImageUpload({ evtId, imageUploaded }) {
     setButtonDisabled(true);
     const res = await fetch(`${API_URL}/api/upload`, {
       method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
       body: new FormData(e.target),
     });
 
     if (res.ok) {
       imageUploaded();
+    } else {
+      toast.error("somthing went wrong");
     }
     setButtonDisabled(false);
   };

@@ -10,22 +10,6 @@ import { API_URL } from "@/config";
 const EventPage = ({ evt }) => {
   const router = useRouter();
 
-  const deleteEvent = async (e) => {
-    if (confirm("Are you sure?")) {
-      const res = await fetch(`${API_URL}/api/events/${evt.id}`, {
-        method: "DELETE",
-      });
-
-      const data = await res.json();
-
-      if (!res.ok) {
-        toast.error(data.message);
-      } else {
-        router.push("/events");
-      }
-    }
-  };
-
   if (router.isFallback) {
     return;
   }
@@ -35,15 +19,6 @@ const EventPage = ({ evt }) => {
   return (
     <Layout>
       <div className="relative pt-10">
-        <div className="absolute flex right-8 top-0">
-          <Link href={`/events/edit/${evt.id}`}>
-            <FaPencilAlt /> Edit Event
-          </Link>
-          <a href="#" className="ml-5 text-red-500" onClick={deleteEvent}>
-            <FaTimes /> Delete Event
-          </a>
-        </div>
-
         <span>
           {new Date(thisEvent.date).toLocaleDateString("en-US")} at{" "}
           {thisEvent.time}
