@@ -8,6 +8,14 @@ import { API_URL } from "@/config/index";
 const SearchPage = ({ events }) => {
   const router = useRouter();
 
+  if (!events)
+    return (
+      <Layout>
+        <h1 className="text-center md:text-start">Upcoming Events</h1>
+        <h4>No events to show</h4>
+      </Layout>
+    );
+
   return (
     <Layout title="Search Results">
       <Link href="/events"> {"<"} Go Back</Link>

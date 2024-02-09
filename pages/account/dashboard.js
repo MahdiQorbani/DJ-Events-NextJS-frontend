@@ -28,6 +28,16 @@ export default function DashboardPage({ events, token }) {
     }
   };
 
+  if (!data)
+    return (
+      <Layout title="User Dashboard">
+        <div>
+          <h1>Dashboard</h1>
+          <h3 className="text-lg font-bold text-red-500">My Events</h3>
+        </div>
+      </Layout>
+    );
+
   return (
     <Layout title="User Dashboard">
       <div>

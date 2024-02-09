@@ -2,9 +2,8 @@ import Layout from "@/components/Layout";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { FaPencilAlt, FaTimes } from "react-icons/fa";
 import { API_URL } from "@/config";
 
 const EventPage = ({ evt }) => {
@@ -41,7 +40,7 @@ const EventPage = ({ evt }) => {
         <p>{thisEvent.performers}</p>
         <h4>Description:</h4>
         <p>{thisEvent.description}</p>
-        <h4>Venue: {evt.venue}</h4>
+        <h4>Venue: {thisEvent.venue}</h4>
         <p>{thisEvent.address}</p>
 
         <Link href="/events" className="block mt-10">
@@ -58,9 +57,11 @@ export async function getStaticPaths() {
   const res = await fetch(`${API_URL}/api/events?sort=date:asc&populate=*`);
   const { data: events } = await res.json();
 
-  const paths = events.map(({ attributes: evt }) => ({
-    params: { slug: evt.slug },
-  }));
+  const paths = events
+    ? events.map(({ attributes: evt }) => ({
+        params: { slug: evt.slug },
+      }))
+    : [];
 
   return {
     paths,
@@ -69,20 +70,25 @@ export async function getStaticPaths() {
 }
 
 export async function getStaticProps({ params: { slug } }) {
-  try {
-    const res = await fetch(
-      `${API_URL}/api/events?filters[slug][$eq]=${slug}&populate=*`
-    );
-    const { data: events } = await res.json();
-    const evt = events ? events[0] : false;
+  const res = await fetch(
+    `${API_URL}/api/events?filters[slug][$eq]=${slug}&populate=*`
+  );
+  const { data: events } = await res.json();
 
+  if (!events) {
     return {
-      props: {
-        evt: evt,
+      redirect: {
+        destination: "/404",
       },
-      revalidate: 1,
     };
-  } catch (error) {
-    return null;
   }
+
+  const evt = events[0];
+
+  return {
+    props: {
+      evt,
+    },
+    revalidate: 1,
+  };
 }

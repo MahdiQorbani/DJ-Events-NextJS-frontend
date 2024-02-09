@@ -29,7 +29,9 @@ const EditEventPage = ({ evt, token }) => {
   const [errors, setErrors] = useState({});
 
   const [imagePreview, setImagePreview] = useState(
-    data.image.data ? data.image.data.attributes.formats.thumbnail.url : null
+    data.image.data.attributes.formats
+      ? data.image.data.attributes.formats.thumbnail.url
+      : null
   );
 
   const [showModal, setShowModal] = useState(false);
@@ -89,7 +91,7 @@ const EditEventPage = ({ evt, token }) => {
     const res = await fetch(`${API_URL}/api/events/${evt.data.id}?populate=*`);
     const newData = await res.json();
     setImagePreview(
-      newData.data.attributes.image.data
+      newData.data.attributes.image.data.attributes.formats
         ? newData.data.attributes.image.data.attributes.formats.thumbnail.url
         : null
     );
@@ -151,6 +153,15 @@ export async function getServerSideProps({ params: { id }, req }) {
   const evt = await res.json();
 
   const { token } = parseCookies(req);
+
+  if (!evt.data) {
+    return {
+      redirect: {
+        destination: "/404",
+      },
+    };
+  }
+
 
   return {
     props: {

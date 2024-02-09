@@ -4,6 +4,13 @@ import EventItem from "@/components/EventItem";
 import { API_URL } from "@/config/index";
 
 const HomePage = ({ events }) => {
+  if (!events)
+    return (
+      <Layout>
+        <h1 className="text-center md:text-start">Upcoming Events</h1>
+        <h4>No events to show</h4>
+      </Layout>
+    );
   return (
     <Layout>
       <h1 className="text-center md:text-start">Upcoming Events</h1>
